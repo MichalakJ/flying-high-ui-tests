@@ -12,14 +12,17 @@ import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import edu.iis.mto.bdd.cucumber.workflowsteps.LoginPage;
 import edu.iis.mto.bdd.model.FrequentFlyerMember;
 
 public class UserAuthenticationSteps {
 	private WebDriver driver ;
+	private LoginPage loginPage;
 	
 	@Before
 	public void init(){
 		driver = new FirefoxDriver();
+		loginPage = new LoginPage(driver);
 	}
 	
     @Given("^(.*) is a registered Frequent Flyer$")
@@ -27,10 +30,8 @@ public class UserAuthenticationSteps {
 
     @When("^(.*) authenticates with a valid email address and password$")
     public void whenJaneAuthenticatesWithAValidEmailAddressAndPassword(FrequentFlyerMember user) {
-    	driver.get("http://localhost:8080/#/welcome");
-    	driver.findElement(By.name("email")).sendKeys("janina.kowalska@acme.com");
-		driver.findElement(By.name("password")).sendKeys("s3cr3t");
-		driver.findElement(By.name("signin")).click();
+    	loginPage.open();
+    	loginPage.signInWithCredentials(user.getEmail(), user.getPassword());
     }
 
     @Then("^(.*) should be given access to (?:her|his) account$")
@@ -40,10 +41,8 @@ public class UserAuthenticationSteps {
 
     @Given("^(.*) has logged on$")
     public void aUserHasLoggedOnAs(FrequentFlyerMember user) {
-    	driver.get("http://localhost:8080/#/welcome");
-    	driver.findElement(By.name("email")).sendKeys("janina.kowalska@acme.com");
-		driver.findElement(By.name("password")).sendKeys("s3cr3t");
-		driver.findElement(By.name("signin")).click();
+    	loginPage.open();
+    	loginPage.signInWithCredentials(user.getEmail(), user.getPassword());
     }
 
     @When("^(?:.*) views the home page$")
