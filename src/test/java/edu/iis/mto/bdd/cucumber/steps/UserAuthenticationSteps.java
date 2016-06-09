@@ -12,17 +12,20 @@ import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import edu.iis.mto.bdd.cucumber.workflowsteps.HomePage;
 import edu.iis.mto.bdd.cucumber.workflowsteps.LoginPage;
 import edu.iis.mto.bdd.model.FrequentFlyerMember;
 
 public class UserAuthenticationSteps {
 	private WebDriver driver ;
 	private LoginPage loginPage;
+	private HomePage homePage;
 	
 	@Before
 	public void init(){
 		driver = new FirefoxDriver();
 		loginPage = new LoginPage(driver);
+		homePage = new HomePage(driver);
 	}
 	
     @Given("^(.*) is a registered Frequent Flyer$")
@@ -36,7 +39,8 @@ public class UserAuthenticationSteps {
 
     @Then("^(.*) should be given access to (?:her|his) account$")
     public void thenTheUserShouldBeGivenAccessToAccount(FrequentFlyerMember userName) {
-    	assertThat(driver.findElement(By.id("welcome-message")).getText(), equalTo("Witaj Janina"));    	
+    	String expectedMsg = homePage.getWelcomeMsg();
+    	assertThat(expectedMsg, equalTo("Witaj Janina"));    	
     }
 
     @Given("^(.*) has logged on$")
